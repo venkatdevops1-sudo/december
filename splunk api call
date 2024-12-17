@@ -3,28 +3,26 @@ Library           RequestsLibrary
 Library           Collections
 Library           JSONLibrary
 Library           String
-Library           OperatingSystem
 
 *** Variables ***
-${URL_FILE}       ./url_file.txt             # File containing the long URL
-${USERNAME}       GB-SVCAT-CICDPRD           # Replace with your username
-${PASSWORD}       your_password_here         # Replace with your password
+${URL}            https://glog-htse-rest.systems.uk.hsbc:8089/services/search/jobs
+${USERNAME}       GB-SVCAT-CICDPRD
+${PASSWORD}       your_password_here
 
 *** Test Cases ***
 Fetch Server Name From API
-    [Documentation]    Read the URL from file, call API, and fetch server hostname
-    ${url}=            Get File             ${URL_FILE}       # Read URL from file
-    ${url}=            Strip String         ${url}            # Clean up unwanted spaces/newlines
-    
-    # Create Authorization Header
+    [Documentation]    Fetch server hostname from API response using Basic Auth
     ${auth_header}=    Create Dictionary    Authorization=Basic ${USERNAME}:${PASSWORD}
+    
+    # Create session
+    Create Session     mysession    ${URL}    auth=${USERNAME}:${PASSWORD}    verify=False
 
-    # Create session and make GET request
-    Create Session     mysession            ${url}            auth=${USERNAME}:${PASSWORD}    verify=False
-    ${response}=       GET On Session       mysession         /                               expected_status=200
+    # Perform GET request
+    ${response}=       GET On Session       mysession    /    expected_status=200
 
-    # Parse JSON Response
-    ${json_response}=  To JSON              ${response.content}
+    # Parse JSON Response (corrected)
+    ${json_response}=  Set Variable         ${response.json()}
     ${hostname}=       Get Value From Json  ${json_response}    $.result.hostname
 
+    # Log the server name
     Log To Console     Server Name: ${hostname}
