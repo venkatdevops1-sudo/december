@@ -1,0 +1,30 @@
+*** Settings ***
+Library           RequestsLibrary
+Library           Collections
+Library           JSONLibrary
+Library           String
+Library           OperatingSystem
+
+*** Variables ***
+${URL_FILE}       ./url_file.txt             # File containing the long URL
+${USERNAME}       GB-SVCAT-CICDPRD           # Replace with your username
+${PASSWORD}       your_password_here         # Replace with your password
+
+*** Test Cases ***
+Fetch Server Name From API
+    [Documentation]    Read the URL from file, call API, and fetch server hostname
+    ${url}=            Get File             ${URL_FILE}       # Read URL from file
+    ${url}=            Strip String         ${url}            # Clean up unwanted spaces/newlines
+    
+    # Create Authorization Header
+    ${auth_header}=    Create Dictionary    Authorization=Basic ${USERNAME}:${PASSWORD}
+
+    # Create session and make GET request
+    Create Session     mysession            ${url}            auth=${USERNAME}:${PASSWORD}    verify=False
+    ${response}=       GET On Session       mysession         /                               expected_status=200
+
+    # Parse JSON Response
+    ${json_response}=  To JSON              ${response.content}
+    ${hostname}=       Get Value From Json  ${json_response}    $.result.hostname
+
+    Log To Console     Server Name: ${hostname}
