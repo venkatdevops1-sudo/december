@@ -8,23 +8,22 @@ Library           String
 ${FULL_URL}       https://glog-htse-rest.systems.uk.hsbc:8089/services/search/jobs/export?output_mode=json
 ${USERNAME}       GB-SVCAT-CICDPRD
 ${PASSWORD}       4Ks537jYMGj0ew
-${HEADERS}        Authorization=Basic ${USERNAME}:${PASSWORD}
+
+*** Keywords ***
+Generic API Call
+    [Documentation]    Perform GET API call to fetch response
+    ${headers}=        Create Dictionary    Authorization=Basic ${USERNAME}:${PASSWORD}    Content-Type=application/json
+    Create Session     sessionId            ${FULL_URL}    headers=${headers}    verify=False
+    ${response}=       GET On Session       sessionId      /    expected_status=200
+    RETURN             ${response.json()}
+
+Fetch Server Name
+    [Documentation]    Fetch server name from API response
+    ${response}=       Generic API Call
+    ${hostname}=       Get Value From Json    ${response}    $.result.hostname
+    Log To Console     Server Name: ${hostname}
 
 *** Test Cases ***
-Fetch Server Name
-    [Documentation]    Fetch server name from the result block of API response using GET
-
-    # Create a session and send GET request
-    Create Session     mysession    ${FULL_URL}    auth=${USERNAME}:${PASSWORD}    verify=False
-
-    ${response}=       GET On Session    mysession    /    headers=${HEADERS}    expected_status=200
-
-    # Log the raw response to debug
-    Log To Console     Response: ${response.text}
-
-    # Parse JSON response correctly
-    ${json_response}=  Set Variable    ${response.json()}
-    ${hostname}=       Get Value From Json    ${json_response}    $.result.hostname
-
-    # Log server name
-    Log To Console     Server Name: ${hostname}
+Fetch Server Name Test
+    [Documentation]    Test case to fetch server name from API
+    Fetch Server Name
