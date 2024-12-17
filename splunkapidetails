@@ -1,0 +1,47 @@
+*** Settings ***
+Library           RequestsLibrary
+Library           Collections
+Library           JSONLibrary
+Library           String
+
+*** Variables ***
+${splunk_base_url}    https://glog-htse-rest.systems.uk.hsbc:8089/services/search/jobs/export?output_mode=json&search=search
+${splunk_auth_token_pass}    GB-SVCAT-CICDPRD:4Ks537jYMGj0ew
+
+*** Keywords ***
+Splunk API Call
+    [Documentation]    Call Splunk API to fetch data
+    Log To Console    Creating Headers for API Request
+    ${headers}=    Create Dictionary    Authorization=Basic ${splunk_auth_token_pass}    Content-Type=application/json
+    Log To Console    Headers: ${headers}
+
+    Log To Console    Creating API Session
+    Create Session    sessionId    ${splunk_base_url}    headers=${headers}    verify=False
+    Log To Console    Session Created Successfully
+
+    Log To Console    Sending GET Request to API
+    ${response}=    GET On Session    sessionId    ${EMPTY}    expected_status=any
+    Log To Console    Response Received: ${response.text}
+
+    [Return]    ${response.json()}
+
+Fetch Server Name
+    [Documentation]    Fetch server name from the API response
+    Log To Console    Calling Splunk API to Fetch Server Name
+    ${response}=    Splunk API Call
+
+    Log To Console    Parsing Response JSON for Hostname
+    ${hostname}=    Get Value From Json    ${response}    $.result.hostname
+    Log To Console    Server Name Fetched: ${hostname}
+
+    Log To Console    Returning Server Name
+    Log To Console    **************************************************************
+    Log To Console    Server Name: ${hostname}
+    Log To Console    **************************************************************
+
+*** Test Cases ***
+Fetch Server Name Test
+    [Documentation]    Test case to fetch server name from API
+    Log To Console    Starting Test Case: Fetch Server Name Test
+    Fetch Server Name
+    Log To Console    Test Case Execution Completed
