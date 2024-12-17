@@ -1,0 +1,47 @@
+*** Settings ***
+Library          RequestsLibrary
+Library          Collections
+Library          JSONLibrary
+Library          String
+
+*** Variables ***
+${FULL_URL}      https://glog-htse-rest.systems.uk.hsbc:8089/services/search/jobs
+${USERNAME}      GB-SVCAT-CICDPRD
+${PASSWORD}      your_password_here
+${HEADERS}       Authorization=Basic ${USERNAME}:${PASSWORD}
+
+*** Test Cases ***
+Fetch Server Name
+    [Documentation]    Fetch server name from the result block of API response using GET
+
+    # Step 1: Create Session
+    Log To Console     Creating session with URL: ${FULL_URL}
+    Create Session     sessionId    ${FULL_URL}    headers=${HEADERS}    verify=False
+    Log To Console     Session created successfully.
+
+    # Step 2: Perform GET Request
+    Log To Console     Sending GET request...
+    ${response}=       GET On Session    sessionId    /    expected_status=200
+    Log To Console     GET request completed.
+
+    # Step 3: Log Response Status
+    Log To Console     Response Status Code: ${response.status_code}
+    Should Be Equal As Strings    ${response.status_code}    200    Response code is not 200!
+
+    # Step 4: Log Full Response
+    Log To Console     Full Response Body:
+    Log To Console     ${response.content}
+
+    # Step 5: Parse JSON Response
+    Log To Console     Parsing JSON response...
+    ${json_response}=  Set Variable    ${response.json()}
+    Log To Console     JSON Response Parsed Successfully.
+
+    # Step 6: Fetch 'hostname' from 'result' Block
+    Log To Console     Fetching 'hostname' from 'result' block...
+    ${hostname}=       Set Variable    ${json_response["result"]["hostname"]}
+    Log To Console     Server Name Found: ${hostname}
+
+    # Step 7: Return Server Name
+    Log To Console     Returning Server Name: ${hostname}
+    Return From Keyword    ${hostname}
