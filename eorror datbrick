@@ -1,0 +1,73 @@
+Time
+2024-12-17 11:13:55 IST
+Message
+Compute terminated. Reason: Bootstrap Timeout
+
+Help
+Bootstrap Timeout. Please try again later.
+Instance bootstrap inferred timeout reason: UnknownReason
+Failure message: Bootstrap script took too long and timeout. 
+VM extension code: ProvisioningState/succeeded
+instanceId: InstanceId(60339daf29814e51ac2a0fdb6a9278a7)
+workerEnv: workerenv-300065250551197
+Additional details (may be truncated):
+
+	dpbmRvd3MubmV0L3B1YmxpYy9ib290c3RyYXAvaW5zdGFuY2UtbWFuYWdlcl8yMDI0LTEyLTEyXzAwLjA5LjQwWl9jbHVzdGVycy1icmFuY2hfMjAyNC0xMi0wNF8xMDQxNmQ0OV8wZDA2ZmQ0Nl8xMjc1MDIyMDcxL3ZtX2Jvb3RzdHJhcCI6IGRpYWwgdGNwOiBsb29rdXAgYXJwcm9kY2luZGlhYTIuYmxvYi5jb3JlLndpbmRvd3MubmV0OiBpL28gdGltZW91dAojNDogSGVhZCAiaHR0cHM6Ly9hcnByb2RjaW5kaWFhMi5ibG9iLmNvcmUud2luZG93cy5uZXQvcHVibGljL2Jvb3RzdHJhcC9pbnN0YW5jZS1tYW5hZ2VyXzIwMjQtMTItMTJfMDAuMDkuNDBaX2NsdXN0ZXJzLWJyYW5jaF8yMDI0LTEyLTA0XzEwNDE2ZDQ5XzBkMDZmZDQ2XzEyNzUwMjIwNzEvdm1fYm9vdHN0cmFwIjogZGlhbCB0Y3A6IGxvb2t1cCBhcnByb2RjaW5kaWFhMi5ibG9iLmNvcmUud2luZG93cy5uZXQ6IGkvbyB0aW1lb3V0CiM1OiBIZWFkICJodHRwczovL2FycHJvZGNpbmRpYWEyLmJsb2IuY29yZS53aW5kb3dzLm5ldC9wdWJsaWMvYm9vdHN0cmFwL2luc3RhbmNlLW1hbmFnZXJfMjAyNC0xMi0xMl8wMC4wOS40MFpfY2x1c3RlcnMtYnJhbmNoXzIwMjQtMTItMDRfMTA0MTZkNDlfMGQwNmZkNDZfMTI3NTAyMjA3MS92bV9ib290c3RyYXAiOiBkaWFsIHRjcDogbG9va3VwIGFycHJvZGNpbmRpYWEyLmJsb2IuY29yZS53aW5kb3dzLm5ldDogaS9vIHRpbWVvdXQKMjAyNC8xMi8xNyAwNTozNjoyMSB1bmtub3duIGh0dHAgcmVzcG9uc2UKIFtCb290c3RyYXAgRXZlbnRdIENvbW1hbmQgRG93bmxvYWRCb290c3RyYXBTY3JpcHQgZmluaXNoZWQuIFN0b3JhZ2UgQWNjb3VudDogYXJwcm9kY2luZGlhYTIuYmxvYi5jb3JlLndpbmRvd3MubmV0IFtGQUlMRURdIFtXaWxsIHRyeSBvdGhlciBzdG9yYWdlIGFjY291bnRzXS4gU2Vjb25kcyBFbGFwc2VkOiA3MC4wMzMzIAo= }
+	[Bootstrap Event] SELF BOOTSTRAP FAILED. [Started at: Tue Dec 17 05:31:40 UTC 2024] [Seconds Elapsed:281] [Start Timestamp: 1734413500] [End Timestamp: 1734413781] 
+	[Bootstrap Event] /etc/resolv.conf dump: 
+	# This file is managed by man:systemd-resolved(8). Do not edit.
+	#
+	# This is a dynamic resolv.conf file for connecting local clients directly to
+	# all known uplink DNS servers. This file lists all configured search domains.
+	#
+	# Third party programs must not access this file directly, but only through the
+	# symlink at /etc/resolv.conf. To manage man:resolv.conf(5) in a different way,
+	# replace this symlink by a static file or a different symlink.
+	#
+	# See man:systemd-resolved.service(8) for details about the supported modes of
+	# operation for /etc/resolv.conf.
+	
+	nameserver 172.16.130.40
+	nameserver 172.16.209.4
+	nameserver 168.63.129.16
+	# Too many DNS servers configured, the following entries may be ignored.
+	nameserver 172.16.130.10
+	nameserver 172.16.130.79
+	search reddog.microsoft.com
+	[Bootstrap Event] DNS output for centralindia.azuredatabricks.net: 
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.209.4#53: timed out
+	Server:		168.63.129.16
+	Address:	168.63.129.16#53
+	
+	Non-authoritative answer:
+	Name:	centralindia.azuredatabricks.net
+	Address: 20.235.199.64
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.209.4#53: timed out
+	
+	[Bootstrap Event] Can reach centralindia.azuredatabricks.net: [SUCCEEDED]
+	[Bootstrap Event] DNS output for dbartifactsprodsindia.blob.core.windows.net: 
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.209.4#53: timed out
+	Server:		168.63.129.16
+	Address:	168.63.129.16#53
+	
+	Non-authoritative answer:
+	dbartifactsprodsindia.blob.core.windows.net	canonical name = blob-vstampxmaxingxedec331c2x1-mzz20prdstr07a.storeindex.core.windows.net.
+	blob-vstampxmaxingxedec331c2x1-mzz20prdstr07a.storeindex.core.windows.net	canonical name = blob-vstampxmaxingxedec331c2x1.trafficmanager.net.
+	blob-vstampxmaxingxedec331c2x1.trafficmanager.net	canonical name = blob.mzz20prdstr10b.store.core.windows.net.
+	Name:	blob.mzz20prdstr10b.store.core.windows.net
+	Address: 20.60.226.11
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.130.40#53: timed out
+	;; communications error to 172.16.209.4#53: timed out
+	
+	[Bootstrap Event] Can reach dbartifactsprodsindia.blob.core.windows.net: [SUCCEEDED]
