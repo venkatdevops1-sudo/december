@@ -1,0 +1,28 @@
+*** Settings ***
+Library           RequestsLibrary
+Library           Collections
+Library           JSONLibrary
+Library           String
+
+*** Variables ***
+${SPLUNK_BASE_URL}    https://glog-htse-rest.systems.uk.hsbc:8089/services/search/jobs/export?output_mode=json&search=search
+${SPLUNK_AUTH}        GB-SVCAT-CICDPRD:4Ks537jYMGj0ew
+
+*** Keywords ***
+Splunk API Call
+    [Documentation]    Perform GET call to Splunk API and fetch response
+    ${headers}=        Create Dictionary    Authorization=Basic ${SPLUNK_AUTH}    Content-Type=application/json
+    Create Session     sessionId           ${SPLUNK_BASE_URL}    headers=${headers}
+    ${response}=       GET On Session      sessionId            /    expected_status=200
+    RETURN             ${response.json()}
+
+Fetch Server Name
+    [Documentation]    Extract server name from API response
+    ${response}=       Splunk API Call
+    ${hostname}=       Get Value From Json    ${response}    $.result.hostname
+    Log To Console     Server Name: ${hostname}
+
+*** Test Cases ***
+Fetch Server Name Test
+    [Documentation]    Test case to fetch server name from API
+    Fetch Server Name
