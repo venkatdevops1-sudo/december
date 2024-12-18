@@ -1,0 +1,43 @@
+*** Settings ***
+Library              RequestsLibrary
+Library              Collections
+Library              JSONLibrary
+Library              String
+
+*** Variables ***
+${splunk_base_url}    https://it-infra-apis.cloud.uk.hsbc/
+${splunk_auth_token_pass}    R0TUzDLVqbblN5RT0IMEQ3JTY1MjFEMEZER2I2
+
+*** Test Cases ***
+Fetch JobId Test
+    [Documentation]    Fetch JobId from API and save it globally
+    Log To Console    Creating Headers for API Request
+    ${headers}=    Create Dictionary    Authorization=Basic ${splunk_auth_token_pass}    Content-Type=application/json
+    Log To Console    Headers: ${headers}
+
+    Log To Console    Creating API Session
+    Create Session    sessionId    ${splunk_base_url}    headers=${headers}    verify=False
+
+    ${params_dict}=    Create Dictionary    targetNode=CAW25038829N03    action=listresources
+    Log To Console    Request Body: ${params_dict}
+
+    ${response}=    POST On Session    sessionId    /cto-pa-win-clus-mgmt/api/v1/details    json=${params_dict}    expected_status=200
+    Log To Console    Response Received: ${response.json()}
+
+    ${jobId}=    Get Value From Json    ${response.json()}    jobId
+    Log To Console    Retrieved jobId: ${jobId}
+
+    Set Suite Variable    ${jobId}
+    Log To Console    jobId Saved Globally: ${jobId}
+
+Fetch Details Using JobId Test
+    [Documentation]    Use jobId to fetch details
+    Log To Console    Using jobId: ${jobId}
+
+    ${url}=    Catenate    SEPARATOR=/    /cto-pa-win-clus-mgmt/api/v1/details    ${jobId}
+    Log To Console    URL Constructed: ${url}
+
+    ${response}=    GET On Session    sessionId    ${url}    expected_status=200
+    Log To Console    Response Received: ${response.json()}
+
+    Should Not Be Empty    ${response.json()}    Response should not be empty
