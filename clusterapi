@@ -1,0 +1,48 @@
+*** Settings ***
+Library              RequestsLibrary
+Library              Collections
+Library              JSONLibrary
+Library              String
+
+*** Variables ***
+${cluster_base_url}    https://it-infra-apis.cloud.uk.hsbc/
+${cluster_auth_token_pass}    R0ItU1ZDLVdpblNSRTo1MEQ3LTY1MjFEMEZERA==
+
+*** Keywords ***
+Cluster API Call
+    [Documentation]    Call Cluster API to fetch data
+    Log To Console    Creating Headers for API Request
+    ${headers}=    Create Dictionary    Authorization=Basic ${cluster_auth_token_pass}    Content-Type=application/json    verify=False
+    Log To Console    Headers: ${headers}
+
+    Log To Console    Creating API Session
+    Create Session    sessionId    ${cluster_base_url}    headers=${headers}    verify=False
+    ${params_dict}=    Create Dictionary    targetNode=CAW25038829N03    action=listresources
+    Log To Console    ${params_dict}
+    Log To Console    Session Created Successfully
+
+    Log To Console    Sending GET Request to API
+    ${response}=    POST On Session    sessionId    /cto-pa-win-clus-mgmt/api/v1/details    json=${params_dict}    expected_status=any
+    Log To Console    Response Received: ${response.text}
+
+    [Return]    ${response.json()}
+	
+Fetch jobId
+    [Documentation]    Fetch server name from the API response
+    Log To Console    Calling Splunk API to Fetch Server Name
+    ${response}=    Cluster API Call
+
+    Log To Console    Parsing Response JSON for Hostname
+    ${jobId}=    Get Value From Json    ${response}    $.jobId
+    Log To Console    jobId   Fetched: ${jobId}
+
+    Log To Console    Returning jobId
+    Log To Console    **************************************************************
+    Log To Console    jobId: ${jobId}
+    Log To Console    **************************************************************
+*** Test Cases ***
+Fetch jobId Test
+    [Documentation]    Test case to fetch jobId
+    Log To Console    Starting Test Case: Fetch jobId Test
+    Fetch jobId
+    Log To Console    Test Case Execution Completed
