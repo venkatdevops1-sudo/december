@@ -1,19 +1,17 @@
 *** Settings ***
 Library              RequestsLibrary
-Library              Collections
 Library              JSONLibrary
 Library              String
 
 *** Variables ***
 ${cluster_base_url}    https://it-infra-apis.cloud.uk.hsbc/
 ${cluster_auth_token_pass}    R0ItU1ZDLVdpblNSRTo1MEQ3LTY1MjFEMEZERA==
-${jobId}               None  # Initialize jobId as a global variable
 
 *** Keywords ***
 Cluster API Call
     [Documentation]    Call Cluster API to fetch data
     Log To Console    Creating Headers for API Request
-    ${headers}=    Create Dictionary    Authorization=Basic ${cluster_auth_token_pass}    Content-Type=application/json    verify=False
+    ${headers}=    Create Dictionary    Authorization=Basic ${cluster_auth_token_pass}    Content-Type=application/json
     Log To Console    Headers: ${headers}
 
     Log To Console    Creating API Session
@@ -23,27 +21,27 @@ Cluster API Call
     Log To Console    Session Created Successfully
 
     Log To Console    Sending POST Request to API
-    ${response}=    POST On Session    sessionId    /cto-pa-win-clus-mgmt/api/v1/details    json=${params_dict}    expected_status=any
+    ${response}=    POST On Session    sessionId    /cto-pa-win-clus-mgmt/api/v1/details    json=${params_dict}    expected_status=200
     Log To Console    Response Received: ${response.text}
 
-    [Return]    ${response.json()}
+    [Return]    ${response.text}
 
 Fetch jobId
     [Documentation]    Fetch jobId from the API response
     Log To Console    Calling Cluster API to Fetch jobId
-    ${response}=    Cluster API Call
+    ${response_text}=    Cluster API Call
 
     Log To Console    Parsing Response JSON for jobId
-    ${jobId}=    Get Value From Json    ${response}    $.jobId
+    ${response_json}=    Convert JSON To Dictionary    ${response_text}
+    ${jobId}=    Get From Dictionary    ${response_json}    jobId
     Log To Console    jobId Fetched: ${jobId}
 
-    # Clean the brackets from jobId
-    ${jobId_cleaned}=    Replace String    ${jobId}    [    ${EMPTY}
-    ${jobId_cleaned}=    Replace String    ${jobId_cleaned}    ]    ${EMPTY}
-    Log To Console    Cleaned jobId: ${jobId_cleaned}
+    # Ensure jobId is treated as a string for URL construction
+    ${jobId_str}=    Convert To String    ${jobId}
+    Log To Console    jobId Converted to String: ${jobId_str}
 
     # Store cleaned jobId in a global variable
-    Set Suite Variable    ${jobId}    ${jobId_cleaned}
+    Set Suite Variable    ${jobId}    ${jobId_str}
     Log To Console    Stored jobId Globally: ${jobId}
 
 Get Details with jobId
@@ -51,14 +49,14 @@ Get Details with jobId
     Log To Console    Fetching Details for jobId: ${jobId}
 
     Log To Console    Creating Headers for GET Request
-    ${headers}=    Create Dictionary    Authorization=Basic ${cluster_auth_token_pass}    Content-Type=application/json    verify=False
+    ${headers}=    Create Dictionary    Authorization=Basic ${cluster_auth_token_pass}    Content-Type=application/json
     Log To Console    Headers: ${headers}
 
     Log To Console    Creating API Session for GET Request
     Create Session    sessionId    ${cluster_base_url}    headers=${headers}    verify=False
 
     Log To Console    Sending GET Request to API with jobId
-    ${response}=    GET On Session    sessionId    /cto-pa-win-clus-mgmt/api/v1/details/${jobId}    expected_status=any
+    ${response}=    GET On Session    sessionId    /cto-pa-win-clus-mgmt/api/v1/details/${jobId}    expected_status=200
     Log To Console    Response Received: ${response.text}
 
     # Return or print the response as needed
