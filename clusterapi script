@@ -1,0 +1,63 @@
+*** Settings ***
+Library              RequestsLibrary
+Library              Collections
+Library              JSONLibrary
+Library              String
+
+*** Variables ***
+${cluster_base_url}    https://it-infra-apis.cloud.uk.hsbc/
+${cluster_auth_token_pass}    R0ItU1ZDLVdpblNSRRe5MEQ3LTY1MjFEMEZERA==
+${jobId}               None
+
+*** Keywords ***
+Cluster API Call
+    [Documentation]    Call Cluster API to fetch data
+    Log To Console    Creating Headers for API Request
+    ${headers}=    Create Dictionary    Authorization=Basic ${cluster_auth_token_pass}    Content-Type=application/json    verify=False
+    Log To Console    Headers: ${headers}
+
+    Log To Console    Creating API Session
+    Create Session    sessionId    ${cluster_base_url}    headers=${headers}    verify=False
+    ${params_dict}=    Create Dictionary    targetNode=CAW25038829N03    action=listresources
+    Log To Console    ${params_dict}
+    Log To Console    Session Created Successfully
+
+    Log To Console    Sending POST Request to API
+    ${response}=    POST On Session    sessionId    /cto-pa-win-clus-mgmt/api/v1/details    json=${params_dict}    expected_status=any
+    Log To Console    Response Received: ${response.text}
+
+    [Return]    ${response.json()}
+
+Get Details with jobId
+    [Documentation]    Use jobId to fetch details with a GET request
+    [Arguments]        ${jobId}
+    Log To Console    Fetching Details for jobId: ${jobId}
+
+    Log To Console    Creating Headers for GET Request
+    ${headers}=    Create Dictionary    Authorization=Basic ${cluster_auth_token_pass}    Content-Type=application/json    verify=False
+    Log To Console    Headers: ${headers}
+
+    Log To Console    Creating API Session for GET Request
+    Create Session    sessionId    ${cluster_base_url}    headers=${headers}    verify=False
+
+    Log To Console    Sending GET Request to API with jobId
+    ${response}=    GET On Session    sessionId    /cto-pa-win-clus-mgmt/api/v1/details/${jobId}    expected_status=any
+    Log To Console    Response Received: ${response.text}
+
+    [Return]    ${response.json()}
+
+*** Test Cases ***
+Fetch and Use jobId in a Single Test
+    [Documentation]    Single test case to fetch jobId and use it in another API call
+    Log To Console    Starting Test Case: Fetch and Use jobId in a Single Test
+
+    Log To Console    Step 1: Fetching jobId
+    ${response}=    Cluster API Call
+    ${jobId}=    Get Value From Json    ${response}    $.jobId
+    Log To Console    Fetched jobId: ${jobId}
+
+    Log To Console    Step 2: Fetching Details Using jobId
+    ${details}=    Get Details with jobId    ${jobId}
+    Log To Console    Retrieved Details: ${details}
+
+    Log To Console    Test Case Execution Completed
