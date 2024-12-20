@@ -1,0 +1,10 @@
+Log To Console    Response Received: ${response.text}
+
+# Parse the JSON response
+${parsed_response}=    Evaluate    json.loads(${response.text})    json=${json}
+
+# Extract the "State" value of "File Share Witness"
+${file_share_state}=    Evaluate    [x['State'] for x in ${parsed_response['artifacts']['taskOutput']} if x['Name'] == 'File Share Witness'][0]
+
+# Print the extracted value
+Log To Console    File Share Witness State: ${file_share_state}
