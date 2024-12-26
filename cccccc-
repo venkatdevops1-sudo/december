@@ -1,0 +1,4 @@
+sha256:3daceb9f8e72d249945b1ccd5929be5b16a4264d4e3eda365e900a58352ecfb2
+sha256:81e39b52b2fb62f6496b5598c566b83ae33415564608bec8770d1d0b62cbe5b9
+
+https://portal.azure.com/#view/Microsoft_Azure_Security/Recommendation.ReactView/assessedResourceId/%2Fsubscriptions%2F6417fd2b-e5bc-414b-a04d-60da387d282f%2Fresourcegroups%2Frg-dev-supplychaincontroltower%2Fproviders%2Fmicrosoft.containerregistry%2Fregistries%2Fdevscmct%2Fsecurityentitydata%2Frepositories-rca-web-service-images-sha256%3A8d0fe2f34e167dcfbaf9e5ca456ea5a3788d74e4e1be718f9de538dd0474442f%2Fproviders%2FMicrosoft.Security%2Fassessments%2F33422d8f-ab1e-42be-bc9a-38685bb567b9/recommendationDisplayName/%5BPreview%5D%20Container%20images%20in%20Azure%20registry%20should%20have%20vulnerability%20findings%20resolved
