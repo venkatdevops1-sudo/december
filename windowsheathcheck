@@ -13,3 +13,26 @@ healthCheckStatus.windows_server_status.ClusterState.ClusterHealth.ClusterResour
 healthCheckStatus.windows_server_status.Uptime
 
 
+
+
+
+
+
+
+Automate the validation of SQL Server cluster resources' state using Robot Framework.
+
+Description:
+Develop a Robot Framework script to validate that all specified SQL Server cluster resources are in the "Online" state. The script should:
+
+Check ClusterState → ClusterHealth → clusterResource for the resource type:
+(a) Name: "Cluster Name"
+(b) Type: "SQL Server Availability Group"
+(c) If (b) is absent, verify the Type: "SQL Server"
+Ensure all resources identified have their State as "Online".
+Log the results for reporting and debugging purposes.
+Acceptance Criteria:
+Script Implementation:
+
+Robot Framework script is implemented and executes successfully without errors.
+
+
