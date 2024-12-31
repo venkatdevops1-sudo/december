@@ -9,3 +9,7 @@ healthCheckStatus.windows_server_status.ClusterState.ClusterHealth.ClusterResour
 
 healthCheckStatus.windows_server_status.ClusterState.ClusterHealth.ClusterResource[?(@.Name=="Cluster Name")].State
 
+
+healthCheckStatus.windows_server_status.Uptime
+
+
