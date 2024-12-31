@@ -2,3 +2,10 @@ $.healthCheckStatus.windows_server_status.AutomaticServices.Services[?(@.Display
 
 
 $.healthCheckStatus.windows_server_status.ClusterState.ClusterHealth.ClusterNode[*].State
+
+
+
+healthCheckStatus.windows_server_status.ClusterState.ClusterHealth.ClusterResource[?(@.Type=="SQL Server Availability Group")].State
+
+healthCheckStatus.windows_server_status.ClusterState.ClusterHealth.ClusterResource[?(@.Name=="Cluster Name")].State
+
