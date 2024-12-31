@@ -1,0 +1,1 @@
+$.healthCheckStatus.windows_server_status.AutomaticServices.Services[?(@.Displayname=="Cluster Service")].State
