@@ -1,0 +1,20 @@
+*** Test Cases ***
+Fetch and Validate Windows Test
+    [Documentation]    Test case to validate ClusterServiceStateStatus is Running and at least one AllClusterNodeStatus is Up.
+    Log To Console    Starting Test Case: Fetch and Validate Windows Test
+
+    # Call Fetch status function
+    ${status_output}=    Fetch status
+    Log To Console    Fetch status executed successfully.
+
+    # Validate ClusterServiceStateStatus
+    ${cluster_status}=    Parse Response JSON    ${status_output}    ClusterServiceStateStatus
+    Should Be Equal As Strings    ${cluster_status}    Running
+    Log To Console    ClusterServiceStateStatus is Running.
+
+    # Validate AllClusterNodeStatus
+    ${node_status_list}=    Parse Response JSON    ${status_output}    AllClusterNodeStatus
+    Should Contain    ${node_status_list}    Up
+    Log To Console    At least one node in AllClusterNodeStatus is Up.
+
+    Log To Console    Test Case Execution Completed
